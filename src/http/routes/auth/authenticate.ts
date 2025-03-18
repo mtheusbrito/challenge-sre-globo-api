@@ -22,7 +22,7 @@ type AuthenticateBody = z.infer<typeof bodySchema>;
 const options: RouteShorthandOptions = {
     schema: {
         tags: ['Auth'],
-        summary: 'Authenticate a user',
+        summary: 'Authenticate users',
         body: bodySchema,
         response:{
             201: responseCreatedSchema,

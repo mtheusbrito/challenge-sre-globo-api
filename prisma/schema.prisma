@@ -30,20 +30,20 @@ model Participant {
   name  String
   votes Vote[]
 
-  eliminationPollId String?          @map("elimination_poll_id")
-  eliminationPoll   EliminationPoll? @relation(fields: [eliminationPollId], references: [id], onDelete: Cascade)
+  pollId String?          @map("poll_id")
+  poll   Poll? @relation(fields: [pollId], references: [id], onDelete: Cascade)
 
   @@map("participants")
 }
 
-model EliminationPoll {
+model Poll {
   id           String        @id @default(uuid())
   startDate    DateTime
   endDate      DateTime
   votes        Vote[]
   participants Participant[]
 
-  @@map("elimination_polls")
+  @@map("polls")
 }
 
 model Vote {
@@ -55,8 +55,8 @@ model Vote {
   participantId String      @map("participant_id")
   participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
 
-  eliminationPollId String          @map("elimination_poll_id")
-  eliminationPoll   EliminationPoll @relation(fields: [eliminationPollId], references: [id], onDelete: Cascade)
+  pollId String          @map("poll_id")
+  poll   Poll @relation(fields: [pollId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now()) @map("created_at")
   

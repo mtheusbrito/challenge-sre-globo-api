@@ -9,6 +9,11 @@ import { jsonSchemaTransform, serializerCompiler, validatorCompiler, ZodTypeProv
 import { errorHandler } from "./error_handler";
 import { register } from './routes/account/register'
 import { authenticate } from './routes/auth/authenticate'
+import { getPoll } from './routes/polls/get-poll'
+import { getPolls } from './routes/polls/get-polls'
+import { createNewVote } from './routes/polls/create-new-vote'
+import { getSummary } from './routes/polls/get-summary'
+import { getResult } from './routes/polls/get-result'
 
 const app = fastify();
 app.setValidatorCompiler(validatorCompiler)
@@ -32,7 +37,7 @@ app.register(
                 console.log(`${routeOptions.method} - ${routeOptions.url}`)
             }
         })
-     
+
         app.setErrorHandler(errorHandler)
 
         app.register(fastifySwagger, {
@@ -48,13 +53,14 @@ app.register(
                             type: 'http',
                             scheme: 'bearer',
                             bearerFormat: 'JWT',
+
                         },
                     },
                 },
             },
             transform: jsonSchemaTransform,
         })
-        app.register(fastifyJwt, { secret: 'weeee' })
+        app.register(fastifyJwt, { secret: process.env.JWT_SECRET as string })
 
         app.register(fastifySwaggerUi, {
             routePrefix: '/docs',
@@ -62,9 +68,20 @@ app.register(
         })
 
         app.register(fastifyCors)
-        app.register(register, {prefix: '/account'})
-        app.register(authenticate, {prefix: '/auth'})
-
+        app.register(register, { prefix: '/account' })
+        app.register(authenticate, { prefix: '/auth' })
+        app.register(
+            (app, _, done) => {
+                app.register(getPolls)
+                app.register(getPoll)
+                app.register(createNewVote)
+                app.register(getSummary)
+                app.register(getResult)
+                done();
+            }, {
+            prefix: '/polls'
+        }
+        )
         done();
     },
     { prefix: '/api' }

@@ -20,7 +20,7 @@ type CreateAccountBody = z.infer<typeof bodySchema>;
 const options: RouteShorthandOptions = {
     schema: {
         tags: ['Account'],
-        summary: 'Create a new account',
+        summary: 'Register a new user',
         body: bodySchema,
         response:{
             201: responseCreatedSchema,
