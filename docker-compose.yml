@@ -1,0 +1,37 @@
+services: 
+  pg: 
+    image: 'bitnami/postgresql:latest'
+    container_name: db
+    environment: 
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=challenge-sre-globo
+    ports: 
+      - '0.0.0.0:5432:5432'
+    restart: always
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'docker', '-d', 'challenge-sre-globo']
+      interval: 5s
+      timeout: 2s
+      retries: 20
+    volumes:
+      - challenge-sre-globo-api-pg-data:/bitnami/postgresql
+  app:
+    container_name: challenge-sre-globo-api
+    build:
+      context: .
+      args:
+        NODE_ENV: production
+        DATABASE_URL: postgresql://docker:docker@pg:5432/challenge-sre-globo?schema=public
+        JWT_SECRET: awesome-secret
+        SERVER_PORT: 3001
+    ports:
+      - '0.0.0.0:3001:3001'
+    depends_on:
+      pg:
+        condition: service_healthy
+    volumes:
+      - .:/usr/app      
+volumes:
+  challenge-sre-globo-api-pg-data:
+    driver: local

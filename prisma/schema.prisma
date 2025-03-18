@@ -5,13 +5,60 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = ["native", "darwin-arm64", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x"]
-  output   = "../.prisma/client"
-
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x"]
+  output        = "../.prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  votes    Vote[]
+
+  @@map("users")
+}
+
+model Participant {
+  id    String @id @default(uuid())
+  name  String
+  votes Vote[]
+
+  eliminationPollId String?          @map("elimination_poll_id")
+  eliminationPoll   EliminationPoll? @relation(fields: [eliminationPollId], references: [id], onDelete: Cascade)
+
+  @@map("participants")
+}
+
+model EliminationPoll {
+  id           String        @id @default(uuid())
+  startDate    DateTime
+  endDate      DateTime
+  votes        Vote[]
+  participants Participant[]
+
+  @@map("elimination_polls")
+}
+
+model Vote {
+  id String @id @default(uuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  participantId String      @map("participant_id")
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  eliminationPollId String          @map("elimination_poll_id")
+  eliminationPoll   EliminationPoll @relation(fields: [eliminationPollId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("votes")
 }
