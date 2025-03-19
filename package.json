@@ -5,7 +5,7 @@
     "node": ">=18.18.2"
   },
   "scripts": {
-    "build": "npm run db:generate:prod && npm run db:migrate:prod && tsup  && cp -R ./node_modules/@fastify/swagger-ui/static/. dist/http/static && cp -r .prisma/client/. dist/",
+    "build": "npx tsup && cp -R ./node_modules/@fastify/swagger-ui/static/. dist/http/static && cp -r .prisma/client/. dist/",
     "db:generate": "prisma generate",
     "db:generate:prod": "prisma generate",
     "db:migrate": "prisma migrate dev",

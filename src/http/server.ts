@@ -87,6 +87,6 @@ app.register(
     { prefix: '/api' }
 )
 
-app.listen({ port: 3001 }).then(() => {
-    console.log(`HTTP server running...`)
+app.listen({ port: Number(process.env.SERVER_PORT), host: '0.0.0.0' }).then(() => {
+    console.log(`HTTP server running an PORT: ${process.env.SERVER_PORT}...`)
 });

@@ -29,9 +29,7 @@ services:
       - '0.0.0.0:3001:3001'
     depends_on:
       pg:
-        condition: service_healthy
-    volumes:
-      - .:/usr/app      
+        condition: service_healthy     
 volumes:
   challenge-sre-globo-api-pg-data:
     driver: local
