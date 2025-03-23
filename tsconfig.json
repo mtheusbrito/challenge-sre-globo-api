@@ -2,7 +2,7 @@
   "include": [
     "src/**/*",
     "@types/*.d.ts"
-  ],
+, "src/jobs/.ts"  ],
   "compilerOptions": {
     "target": "es2020",
     "module": "CommonJS",

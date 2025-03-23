@@ -1,11 +1,8 @@
 import type { FastifyInstance, RouteShorthandOptions } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
-
-import { prisma } from '@/lib/prisma';
-import { NotFoundError } from '../_errors/not-found.error';
 import { auth } from '@/http/middlewares/auth';
-import { BadRequestError } from '../_errors/bad-request.error';
+import queue from '@/lib/queue';
 
 const paramsSchema = z.object({
     pollId: z.string().uuid()
@@ -47,30 +44,8 @@ export async function createNewVote(app: FastifyInstance) {
                 const { pollId } = request.params as CreateNewVoteParams;
                 const { participantId } = request.body as CreateNewVoteBody;
 
-                const poll = await prisma.poll.findUnique({
-                    where: { id: pollId },
-                    include: { participants: true }
-                });
-
-                if (!poll)
-                    throw new NotFoundError('Poll not found');
-
-                const participantExists = poll.participants.some(p => p.id === participantId);
-
-                if (!participantExists)
-                    throw new BadRequestError('Participant does not exist in Poll');
-
-                if (new Date() > poll.endDate)
-                    throw new BadRequestError('Voting is now closed!');
-
-                const vote = await prisma.vote.create({
-                    data: {
-                        userId,
-                        participantId,
-                        pollId
-                    }
-                })
-
+                await queue.add('registration-vote', {participantId, pollId, userId})
+                
                 return reply.status(201).send({})
             },
         )

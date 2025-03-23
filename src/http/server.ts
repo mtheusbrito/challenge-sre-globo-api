@@ -1,8 +1,10 @@
+import { fastify } from 'fastify'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
+
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
-import { fastify } from 'fastify'
+import metricsPlugin from 'fastify-metrics'
 import path from 'path'
 
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
@@ -16,6 +18,12 @@ import { getSummary } from './routes/polls/get-summary'
 import { getResult } from './routes/polls/get-result'
 
 const app = fastify();
+
+
+app.register(metricsPlugin, { endpoint: '/metrics', defaultMetrics: { 
+    enabled: true,
+    
+} });
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 app.withTypeProvider<ZodTypeProvider>()

@@ -27,6 +27,4 @@ RUN npm run db:generate:prod
 
 RUN npm run build
 
-EXPOSE ${SERVER_PORT}
-
-CMD ["sh", "-c", "npm run start:server"]
+CMD ["sh", "-c", "npm run start:queue"]

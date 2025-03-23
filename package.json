@@ -2,7 +2,7 @@
   "name": "challenge-sre-globo-api",
   "version": "1.0.0",
   "engines": {
-    "node": ">=18.18.2"
+    "node": ">=18.19.0"
   },
   "scripts": {
     "build": "npx tsup && cp -R ./node_modules/@fastify/swagger-ui/static/. dist/http/static && cp -r .prisma/client/. dist/",
@@ -11,11 +11,15 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:prod": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "dev": "tsx watch src/http/server.ts",
-    "start": "node dist/http/server.js"
+    "db:seed": "prisma db seed",
+    "dev": "npm-run-all -p dev:*",
+    "dev:server": "tsx watch src/http/server.ts",
+    "dev:queue": "tsx watch src/queues/queue.ts",
+    "start:server": "node dist/http/server.js",
+    "start:queue": "node dist/queues/queue.js"
   },
   "prisma": {
-        "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,16 +32,22 @@
     "@fastify/swagger-ui": "^4.0.1",
     "@prisma/client": "6.5.0",
     "bcryptjs": "^3.0.2",
+    "bull": "^4.16.5",
+    "dotenv": "^16.4.7",
     "faker": "^6.6.6",
-    "fastify": "^4.28.1",
+    "fastify": "^4.29.0",
+    "fastify-metrics": "^11.0.0",
     "fastify-plugin": "^4.5.1",
     "fastify-print-routes": "^3.2.0",
     "fastify-type-provider-zod": "^2.0.0",
+    "or": "^0.2.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.6.0",
+    "@types/k6": "^1.0.1",
     "@types/node": "^22.13.10",
+    "npm-run-all": "^4.1.5",
     "prisma": "^6.5.0",
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",

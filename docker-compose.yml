@@ -1,16 +1,33 @@
 services: 
+  redis:
+    image: 'bitnami/redis:latest'
+    container_name: queue
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '0.0.0.0:${REDIS_PORT}:${REDIS_PORT}'
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+    volumes:
+        - challenge-sre-globo-api-queue-data:/bitnami/redis
   pg: 
     image: 'bitnami/postgresql:latest'
     container_name: db
     environment: 
-      - POSTGRES_USER=docker
-      - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=challenge-sre-globo
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      # - TZ=America/Sao_Paulo
+      # - PGTZ=America/Sao_Paulo
     ports: 
       - '0.0.0.0:5432:5432'
+    depends_on:
+      redis:
+        condition: service_healthy 
     restart: always
     healthcheck:
-      test: ['CMD', 'pg_isready', '-U', 'docker', '-d', 'challenge-sre-globo']
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
       interval: 5s
       timeout: 2s
       retries: 20
@@ -22,14 +39,48 @@ services:
       context: .
       args:
         NODE_ENV: production
-        DATABASE_URL: postgresql://docker:docker@pg:5432/challenge-sre-globo?schema=public
-        JWT_SECRET: awesome-secret
-        SERVER_PORT: 3001
+        DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg:5432/${POSTGRES_DB}?schema=public
+        JWT_SECRET: ${JWT_SECRET}
+        SERVER_PORT: ${SERVER_PORT}
+        REDIS_HOST: redis
+        REDIS_PORT: ${REDIS_PORT}
     ports:
-      - '0.0.0.0:3001:3001'
+      - '0.0.0.0:${SERVER_PORT}:${SERVER_PORT}'
     depends_on:
       pg:
-        condition: service_healthy     
+        condition: service_healthy
+  queue:
+    container_name: challenge-sre-globo-queue
+    build:
+      context: .
+      dockerfile: Dockerfile.queue
+      args:
+        NODE_ENV: production
+        DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg:5432/${POSTGRES_DB}?schema=public
+        JWT_SECRET: ${JWT_SECRET}
+        SERVER_PORT: ${SERVER_PORT}
+        REDIS_HOST: redis
+        REDIS_PORT: ${REDIS_PORT}
+    depends_on:
+      pg:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana-enterprise
+    ports:
+      - 3002:3000
+    volumes:
+      - ./tmp/grafana:/var/lib/grafana
 volumes:
   challenge-sre-globo-api-pg-data:
     driver: local
+  challenge-sre-globo-api-queue-data:
+    driver: local
+  

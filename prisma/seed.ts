@@ -1,11 +1,10 @@
 import { PrismaClient } from './../.prisma/client'
 import { hash } from 'bcryptjs'
 import { faker } from '@faker-js/faker'
-
 const prisma = new PrismaClient()
 
 async function seed() {
-    
+
     await prisma.user.deleteMany();
     await prisma.poll.deleteMany();
     await prisma.vote.deleteMany();
@@ -15,32 +14,44 @@ async function seed() {
 
     const user = await prisma.user.create({
         data: {
+            id: 'e7db74cb-1ecf-4822-bb29-5a5527b5defb',
             name: 'Test',
             email: 'test@email.com',
             password: passwordHash
         }
     })
 
+
+
     let endDate = new Date();
-    endDate.setDate(endDate.getDate() + 2)
-    endDate.setHours(22,0,0,0)
+    endDate.setDate(endDate.getDate() + 2);
+    endDate.setHours(22, 0, 0, 0);
+    // endDate = fixTz(endDate, -3);
+
+    let startDate = new Date();
+    // startDate = fixTz(startDate, -3);
+
 
     const poll = await prisma.poll.create({
-        data:{
-            startDate: new Date(),
+        data: {
+            id: '483cabc0-e942-419a-92a8-6a532c38a14b',
+            startDate: startDate,
             endDate: endDate
         }
+    
     })
 
     await prisma.participant.create({
-        data:{
+        data: {
+            id: 'e0435c28-7ef1-4e05-9e7e-1f8fa29ff45f',
             name: faker.person.fullName(),
             pollId: poll.id
         }
     })
 
     await prisma.participant.create({
-        data:{
+        data: {
+            id: '02a50075-8928-4361-9460-e777ea0f050e',
             name: faker.person.fullName(),
             pollId: poll.id
         }

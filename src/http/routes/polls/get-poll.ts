@@ -53,7 +53,7 @@ export async function getPoll(app: FastifyInstance) {
             return reply.status(200).send({
                 id: poll.id,
                 endDate: poll.endDate,
-                startDate: poll.startDate,
+                startDate:  poll.startDate,
                 participants: poll.participants.map(p => {
                     return {
                         id: p.id,

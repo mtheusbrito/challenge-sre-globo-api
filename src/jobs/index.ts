@@ -1,0 +1,1 @@
+export { default as registrationVote } from './registration-vote'

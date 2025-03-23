@@ -60,7 +60,7 @@ export async function getSummary(app: FastifyInstance) {
                 SELECT
                     p.name AS participant_name,
                     p.id AS participant_id,
-                    COALESCE(ROUND((COUNT(v.participant_id) * 100.0 / (SELECT COUNT(*) FROM votes WHERE poll_id = ${id})), 2), 0) AS percentage_votes
+                    COALESCE(ROUND((COUNT(v.participant_id) * 100.0 / NULLIF((SELECT COUNT(*) FROM votes WHERE poll_id = ${id}), 0)), 2), 0) AS percentage_votes
                 FROM
                     participants p
                 LEFT JOIN
