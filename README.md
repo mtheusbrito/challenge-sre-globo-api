@@ -1,8 +1,6 @@
 # Desafio SRE Globo API
 
-Este projeto é um desafio de SRE que envolve a configuração de uma aplicação utilizando PostgreSQL, Redis,
-Grafana e
-Prometheus.
+Este projeto é um desafio de SRE 
 
 ## Tecnologias Utilizadas
 - **Node.js**
@@ -63,12 +61,12 @@ Esta opção simplifica a configuração do ambiente, garantindo que todos os se
    docker ps
    ```
 
-5. Execute as migrations
+5. Execute as migrations:
    ```sh
    npm run db:migrate
    ```
 
-6. Popule o banco
+6. Popule o banco:
    ```sh
    npm run db:seed
    ```
@@ -78,17 +76,17 @@ Esta opção simplifica a configuração do ambiente, garantindo que todos os se
    http://localhost:3001/api/docs#/
    ```
 
-8. Acesse as Metricas 
+8. Acesse as Metricas no navegador:
    ```sh
    http://localhost:3001/metrics
    ```   
 
-9. Acesse o Prometheus no navegador
+9. Acesse o Prometheus no navegador:
     ```sh
     http://localhost:9090
     ```
 
-10. Acesse o Grafana no navegador
+10. Acesse o Grafana no navegador:
     ```sh
     http://localhost:3002
     ```
@@ -140,7 +138,7 @@ Caso prefira rodar os serviços diretamente na sua máquina.
    
    ```
 
-4. Gere client do prisma
+4. Gere client do prisma:
     ```sh
     npm run db:generate
     ```
@@ -150,7 +148,7 @@ Caso prefira rodar os serviços diretamente na sua máquina.
     npm run db:migrate
     ```
 
-6. Popule o banco
+6. Popule o banco:
    ```
    npm run db:seed
    ```
