@@ -4,11 +4,10 @@ export const options = {
     scenarios: {
         high_load: {
             executor: 'constant-arrival-rate',
-            rate: 1000, // 1000 req/por segundo
-            timeUnit: '10s', // 1000 req a cada 10 segundos
-            duration: '1s',
-            preAllocatedVUs: 500, //usuaários virtuais
-            maxVUs: 1000, // Número máximo de usuários virtuais
+            rate: 1000,
+            timeUnit: '1s',
+            duration: '60s',
+            preAllocatedVUs: 500
         },
     },
 };

@@ -44,7 +44,9 @@ Esta opção simplifica a configuração do ambiente, garantindo que todos os se
    REDIS_HOST=127.0.0.1
    REDIS_PORT=6379
 
-   SERVER_PORT=3001
+   HTTP_SERVER_PORT=3001
+   WORK_SERVER_PORT=3004
+
 
    DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?schema=public"
 
@@ -130,7 +132,8 @@ Caso prefira rodar os serviços diretamente na sua máquina.
    REDIS_HOST=127.0.0.1
    REDIS_PORT=6379
 
-   SERVER_PORT=3001
+   HTTP_SERVER_PORT=3001
+   WORK_SERVER_PORT=3004
 
    DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?schema=public"
 

@@ -21,16 +21,11 @@ async function seed() {
         }
     })
 
-
-
     let endDate = new Date();
     endDate.setDate(endDate.getDate() + 2);
     endDate.setHours(22, 0, 0, 0);
-    // endDate = fixTz(endDate, -3);
 
     let startDate = new Date();
-    // startDate = fixTz(startDate, -3);
-
 
     const poll = await prisma.poll.create({
         data: {

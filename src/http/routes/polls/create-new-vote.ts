@@ -2,7 +2,7 @@ import type { FastifyInstance, RouteShorthandOptions } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { auth } from '@/http/middlewares/auth';
-import queue from '@/lib/queue';
+import { addJob } from '@/jobs/producer';
 
 const paramsSchema = z.object({
     pollId: z.string().uuid()
@@ -44,7 +44,8 @@ export async function createNewVote(app: FastifyInstance) {
                 const { pollId } = request.params as CreateNewVoteParams;
                 const { participantId } = request.body as CreateNewVoteBody;
 
-                await queue.add('registration-vote', {participantId, pollId, userId})
+                // await queue.add('registration-vote', {participantId, pollId, userId})
+                await addJob('registrationVote', {participantId,userId, pollId})
                 
                 return reply.status(201).send({})
             },

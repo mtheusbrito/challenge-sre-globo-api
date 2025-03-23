@@ -1,7 +1,7 @@
 services: 
   redis:
     image: 'bitnami/redis:latest'
-    container_name: queue
+    container_name: redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
@@ -10,7 +10,7 @@ services:
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
     volumes:
-        - challenge-sre-globo-api-queue-data:/bitnami/redis
+        - challenge-sre-globo-api-redis-data:/bitnami/redis
   pg: 
     image: 'bitnami/postgresql:latest'
     container_name: db
@@ -41,26 +41,34 @@ services:
         NODE_ENV: production
         DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg:5432/${POSTGRES_DB}?schema=public
         JWT_SECRET: ${JWT_SECRET}
-        SERVER_PORT: ${SERVER_PORT}
+        HTTP_SERVER_PORT: ${HTTP_SERVER_PORT}
+        WORK_SERVER_PORT: ${WORK_SERVER_PORT}
         REDIS_HOST: redis
         REDIS_PORT: ${REDIS_PORT}
+        DATABASE_REDIS_URL: redis://redis:${REDIS_PORT}
     ports:
-      - '0.0.0.0:${SERVER_PORT}:${SERVER_PORT}'
+      - '0.0.0.0:${HTTP_SERVER_PORT}:${HTTP_SERVER_PORT}'
     depends_on:
       pg:
         condition: service_healthy
-  queue:
-    container_name: challenge-sre-globo-queue
+      redis:
+        condition: service_healthy
+  worker:
+    container_name: challenge-sre-globo-worker
     build:
       context: .
-      dockerfile: Dockerfile.queue
+      dockerfile: Dockerfile.worker
       args:
         NODE_ENV: production
         DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg:5432/${POSTGRES_DB}?schema=public
         JWT_SECRET: ${JWT_SECRET}
-        SERVER_PORT: ${SERVER_PORT}
+        HTTP_SERVER_PORT: ${HTTP_SERVER_PORT}
+        WORK_SERVER_PORT: ${WORK_SERVER_PORT}
         REDIS_HOST: redis
         REDIS_PORT: ${REDIS_PORT}
+        DATABASE_REDIS_URL: redis://redis:${REDIS_PORT}
+    ports:
+      - '0.0.0.0:${WORK_SERVER_PORT}:${WORK_SERVER_PORT}'
     depends_on:
       pg:
         condition: service_healthy
@@ -81,6 +89,6 @@ services:
 volumes:
   challenge-sre-globo-api-pg-data:
     driver: local
-  challenge-sre-globo-api-queue-data:
+  challenge-sre-globo-api-redis-data:
     driver: local
   

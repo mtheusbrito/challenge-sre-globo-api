@@ -1,3 +1,3 @@
 #!/bin/sh
 npm run start:server &
-npm run start:queue
+npm run start:worker
