@@ -60,7 +60,7 @@ export default function (data) {
     const response = http.post(url, payload, params);
 
     check(response, {
-        'Process vote with success': (r) => r.status === 200,
+        'Process vote with success': (r) => r.status === 201,
     });
 }
 
