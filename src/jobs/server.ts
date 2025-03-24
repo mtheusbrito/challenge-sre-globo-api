@@ -1,5 +1,5 @@
 import './workers'
-import { register } from "@/observability/metrics";
+import { register } from "@/jobs/observability/worker-metrics";
 import fastify from "fastify";
 
 const app = fastify();

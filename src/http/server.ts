@@ -16,6 +16,7 @@ import { getPolls } from './routes/polls/get-polls'
 import { createNewVote } from './routes/polls/create-new-vote'
 import { getSummary } from './routes/polls/get-summary'
 import { getResult } from './routes/polls/get-result'
+import { register as registerCustomMetrics } from "@/jobs/observability/producer-metrics";
 
 const app = fastify();
 
@@ -95,7 +96,10 @@ app.register(
     },
     { prefix: '/api' }
 )
-
+app.get('/metrics-producer', async (request, reply) => {
+    reply.header('Content-Type', registerCustomMetrics.contentType);
+      return registerCustomMetrics.metrics();
+});
 app.listen({ port: Number(process.env.HTTP_SERVER_PORT), host: '0.0.0.0' }).then(() => {
     console.log(`HTTP server running an PORT: ${process.env.HTTP_SERVER_PORT}...`)
 });

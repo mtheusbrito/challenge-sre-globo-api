@@ -2,7 +2,7 @@ import { ParticipantNotExistAtPoll } from "@/errors/create-vote/participant-not-
 import { PollNotAvailableToVoting } from "@/errors/create-vote/poll-not-available-for-voting";
 import { PollNotFoundError } from "@/errors/create-vote/poll-not-found-error";
 import { prisma } from "@/lib/prisma";
-import { jobDuration, jobFailures, jobSuccess } from "@/observability/metrics";
+import { jobDuration, jobFailures, jobSuccess } from "@/jobs/observability/worker-metrics";
 import Queue, { Job } from "bee-queue";
 
 export type JobTypes = 'registrationVote';
@@ -17,6 +17,12 @@ export type RegistrationVotePayload = {
 export type JobPayloads = {
     registrationVote: RegistrationVotePayload;
 };
+
+export type QueueType = {
+    type: JobTypes; 
+    payload: JobPayloads[JobTypes]
+}
+
 const queue = new Queue<{ type: JobTypes; payload: JobPayloads[JobTypes] }>('challenge-sre-glob-queue', {
     redis: process.env.DATABASE_REDIS_URL,
     isWorker: true,
