@@ -214,5 +214,5 @@ Ao executar comandos como `npm run db:generate` ou `npm run db:migrate` você po
       output        = "../.prisma/client"
    }
    ```
-   Rode o comando que novamente.
+   Execute o comando novamente.
 
