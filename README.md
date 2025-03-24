@@ -3,7 +3,7 @@
 Este projeto é um desafio de SRE, com o objetivo de implementar uma solução capaz de suportar votações em tempo real, garantindo alta disponibilidade, escalabilidade, segurança e performance.
 
 ## Tecnologias Utilizadas
-- **Node.js**
+- **Node.js** (Runtime JavaScript assíncrono e baseado em eventos, executado no V8, usado para construir aplicações escaláveis no lado do servidor.)
 - **PostgreSQL** (Banco de dados relacional para persistência de dados.)
 - **Prisma** (ORM utilizado para interação com o banco de dados)
 - **Redis** (Utilizado para filas de processamento assíncrono)
@@ -182,3 +182,37 @@ email: user@email.com
 senha: password
 
 Também são criados dados de paredões e participantes.
+
+
+## Solução de Problemas
+
+### Prisma - binaryTargets
+
+Ao executar comandos como `npm run db:generate` ou `npm run db:migrate` você pode receber um aviso informando que a plataforma atual (`darwin-arm64` no exemplo fornecido abaixo) não está incluída na configuração binaryTargets do seu gerador no arquivo prisma/schema.prisma. Isso impede que o Prisma Client gere os binários corretos para sua plataforma, o que pode levar a erros de execução.
+ 
+   ```sh
+   Warning: Your current platform `darwin-arm64` is not included in your generator's `binaryTargets` configuration ["linux-musl-arm64-openssl-3.0.x"].
+   To fix it, use this generator config in your schema.prisma:
+   generator client {
+      provider      = "prisma-client-js"
+      binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+   }
+   Note, that by providing `native`, Prisma Client automatically resolves `darwin-arm64`.
+   Read more about deploying Prisma Client: https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/generators
+   ```
+   Solução: 
+   Localize o arquivo `schema.prisma` no diretório `prisma`, localizado na raiz do projeto.
+
+   Dentro do bloco `generator client`, adicione ou modifique a propriedade binaryTargets para incluir a plataforma que ele solicita.
+
+   Seguindo o exemplo acima, após aplicar o ajuste ficaria assim: 
+
+   ```sh
+   generator client {
+      provider      = "prisma-client-js"
+      binaryTargets = ["linux-musl-arm64-openssl-3.0.x", "darwin-arm64"]
+      output        = "../.prisma/client"
+   }
+   ```
+   Rode o comando que novamente.
+

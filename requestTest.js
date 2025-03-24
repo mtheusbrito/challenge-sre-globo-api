@@ -14,7 +14,7 @@ export const options = {
 
 export function setup() {
     const payload = JSON.stringify({
-        email: 'test@email.com',
+        email: 'user@email.com',
         password: 'password'
     });
 
