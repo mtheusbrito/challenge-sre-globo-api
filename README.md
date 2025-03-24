@@ -16,7 +16,7 @@ Este projeto é um desafio de SRE
 
 ## Como Rodar a Aplicação
 
-### Opção 1: Executando via Docker
+### Opção 1: Executando via Docker (Recomendado)
 
 ### **Pré-requisitos**
 - [Docker](https://www.docker.com/) instalado
