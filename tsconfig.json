@@ -1,20 +1,22 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "_version": "18.2.0",
-  "include": ["src/**/*", "@types/*.d.ts"],
+  "include": [
+    "src/**/*",
+    "@types/*.d.ts"
+, "src/jobs/.ts"  ],
   "compilerOptions": {
-    "lib": ["es2023"],
-    "module": "node16",
-    "target": "es2022",
-    "strict": true,
+    "target": "es2020",
+    "module": "CommonJS",
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16",
     "baseUrl": ".",
     "rootDir": "./",
     "outDir": "./dist",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   }
 }
