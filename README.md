@@ -1,16 +1,15 @@
 # Desafio SRE Globo API
 
-Este projeto é um desafio de SRE 
+Este projeto é um desafio de SRE, com o objetivo de implementar uma solução capaz de suportar votações em tempo real, garantindo alta disponibilidade, escalabilidade, segurança e performance.
 
 ## Tecnologias Utilizadas
 - **Node.js**
-- **PostgreSQL** (Banco de dados)
-- **Prisma** (ORM)
-- **Redis** (Fila de mensagens)
-- **Grafana** (Observabilidade)
-- **Docker & Docker Compose** (Ambiente containerizado)
-- **Fastify Metrics** (Métricas de desempenho)
-- **Prometheus** (Monitoramento de métricas)
+- **PostgreSQL** (Banco de dados relacional para persistência de dados.)
+- **Prisma** (ORM utilizado para interação com o banco de dados)
+- **Redis** (Utilizado para filas de processamento assíncrono)
+- **Grafana** (Utilizado para monitoramento e visualização de métricas)
+- **Docker & Docker Compose** (Containerização da aplicação para facilitar o deploy e a escalabilidade)
+- **Prometheus** (Ferramenta de monitoramento e coleta de métricas em tempo real)
 
 ---
 
@@ -170,3 +169,16 @@ Este projeto é um desafio de SRE
    ```
 
 
+## Criação de Dados no Banco Após Seed
+
+Após rodar o seed, dois usuários são criados no banco de dados. 
+
+Usuário admin
+email: admin@email.com
+senha: password
+
+Usuário comum
+email: user@email.com
+senha: password
+
+Também são criados dados de paredões e participantes.

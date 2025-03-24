@@ -85,6 +85,7 @@ app.register(
                 app.register(createNewVote)
                 app.register(getSummary)
                 app.register(getResult)
+          
                 done();
             }, {
             prefix: '/polls'

@@ -47,7 +47,7 @@ export async function authenticate(app: FastifyInstance) {
                 throw new BadRequestError('Invalid credentials.')
 
             const accessToken = await reply.jwtSign({
-                sub: user.id
+                userId: user.id, role: user.role
             }, {
                 sign: {
                     expiresIn: '7d'

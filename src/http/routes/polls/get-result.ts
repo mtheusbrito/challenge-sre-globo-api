@@ -4,6 +4,8 @@ import { z } from 'zod'
 
 import { prisma } from '@/lib/prisma';
 import { NotFoundError } from '../_errors/not-found.error';
+import { auth } from '@/http/middlewares/auth';
+import { ForbiddenError } from '../_errors/forbidden.error';
 
 const paramsSchema = z.object({
     id: z.string().uuid()
@@ -33,19 +35,28 @@ const options: RouteShorthandOptions = {
     schema: {
         tags: ['Poll'],
         summary: 'Get detailed poll results.',
+        security: [{ bearerAuth: [] }],
         params: paramsSchema,
         response: {
             200: responseOkSchema,
             404: responseErrorSchema,
+            401: responseErrorSchema,
+            403: responseErrorSchema,
         }
     }
 }
 
 export async function getResult(app: FastifyInstance) {
-    app.withTypeProvider<ZodTypeProvider>().get(
+    app.withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .get(
         '/:id/results',
         options,
         async (request, reply) => {
+            const { role } = await request.getCurrentUserData()
+            if(role === 'USER'){
+                throw new ForbiddenError('Unauthorized')
+            }
             const { id } = request.params as GetResultParams;
             const poll = await prisma.poll.findUnique({
                 where: {

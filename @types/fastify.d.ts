@@ -1,7 +1,8 @@
 import 'fastify'
+import type { Role } from '.prisma/client'
 
 declare module 'fastify' {
   export interface FastifyRequest {
-    getCurrentUserId(): Promise<string>
+    getCurrentUserData(): Promise<{role: Role, userId: string}>
   }
 }

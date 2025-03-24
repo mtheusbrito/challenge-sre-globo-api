@@ -12,11 +12,22 @@ async function seed() {
 
     const passwordHash = await hash('password', 1)
 
-    const user = await prisma.user.create({
+    // user test
+    await prisma.user.create({
         data: {
             id: 'e7db74cb-1ecf-4822-bb29-5a5527b5defb',
-            name: 'Test',
-            email: 'test@email.com',
+            name: 'User',
+            email: 'user@email.com',
+            password: passwordHash
+        }
+    })
+
+    // user admin
+    await prisma.user.create({
+        data: {
+            id: 'f51514d2-d817-4ada-b291-db404fc7ceb2',
+            name: 'Admin',
+            email: 'admin@email.com',
             password: passwordHash
         }
     })

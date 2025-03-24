@@ -40,7 +40,7 @@ export async function createNewVote(app: FastifyInstance) {
             '/:pollId/vote',
             options,
             async (request, reply) => {
-                const userId = await request.getCurrentUserId()
+                const { userId } = await request.getCurrentUserData()
                 const { pollId } = request.params as CreateNewVoteParams;
                 const { participantId } = request.body as CreateNewVoteBody;
                 
