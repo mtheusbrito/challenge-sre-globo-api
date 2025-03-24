@@ -215,4 +215,4 @@ Ao executar comandos como `npm run db:generate` ou `npm run db:migrate` você po
    }
    ```
    Execute o comando novamente.
-
+   
