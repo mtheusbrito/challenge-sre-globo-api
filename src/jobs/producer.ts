@@ -1,7 +1,7 @@
 import Queue from 'bee-queue';
 import { JobPayloads, JobTypes } from './workers';
 
-const queue = new Queue<{ type: JobTypes; payload: JobPayloads[JobTypes] }>('multiQueue', {
+const queue = new Queue<{ type: JobTypes; payload: JobPayloads[JobTypes] }>('challenge-sre-glob-queue', {
   redis: process.env.DATABASE_REDIS_URL,
   isWorker: false, 
 });

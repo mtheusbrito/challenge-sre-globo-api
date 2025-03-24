@@ -17,7 +17,6 @@ Este projeto é um desafio de SRE
 ## Como Rodar a Aplicação
 
 ### Opção 1: Executando via Docker
-Esta opção simplifica a configuração do ambiente, garantindo que todos os serviços necessários estejam rodando corretamente.
 
 ### **Pré-requisitos**
 - [Docker](https://www.docker.com/) instalado
@@ -45,7 +44,7 @@ Esta opção simplifica a configuração do ambiente, garantindo que todos os se
    REDIS_PORT=6379
 
    HTTP_SERVER_PORT=3001
-   WORK_SERVER_PORT=3004
+   WORKER_SERVER_PORT=3004
 
 
    DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?schema=public"
@@ -73,15 +72,20 @@ Esta opção simplifica a configuração do ambiente, garantindo que todos os se
    npm run db:seed
    ```
 
-7. Acesse a aplicação no navegador:
+7. Acesse a documentaçao da aplicação no navegador:
    ```sh
    http://localhost:3001/api/docs#/
    ```
 
-8. Acesse as Metricas no navegador:
+8. Acesse as Metricas da aplicaçao no navegador:
    ```sh
    http://localhost:3001/metrics
    ```   
+
+9. Acesse as Métricas do worker no navegador:
+   ```sh
+   http://localhost:3004/metrics
+   ```  
 
 9. Acesse o Prometheus no navegador:
     ```sh
@@ -100,7 +104,6 @@ Esta opção simplifica a configuração do ambiente, garantindo que todos os se
 ---
 
 ### Opção 2: Executando Localmente (Sem Docker)
-Caso prefira rodar os serviços diretamente na sua máquina.
 
 ### **Pré-requisitos**
 - [PostgreSQL](https://www.postgresql.org/) instalado e rodando
@@ -133,7 +136,7 @@ Caso prefira rodar os serviços diretamente na sua máquina.
    REDIS_PORT=6379
 
    HTTP_SERVER_PORT=3001
-   WORK_SERVER_PORT=3004
+   WORKER_SERVER_PORT=3004
 
    DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?schema=public"
 
@@ -141,7 +144,7 @@ Caso prefira rodar os serviços diretamente na sua máquina.
    
    ```
 
-4. Gere client do prisma:
+4. Gere o client do prisma:
     ```sh
     npm run db:generate
     ```
@@ -161,7 +164,7 @@ Caso prefira rodar os serviços diretamente na sua máquina.
    npm run dev
    ```
 
-6. Acesse a aplicação no navegador:
+6. Acesse a documentacao da aplicação no navegador:
    ```sh
    http://localhost:3001/api/docs
    ```

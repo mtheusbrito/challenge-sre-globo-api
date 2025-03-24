@@ -43,9 +43,8 @@ export async function createNewVote(app: FastifyInstance) {
                 const userId = await request.getCurrentUserId()
                 const { pollId } = request.params as CreateNewVoteParams;
                 const { participantId } = request.body as CreateNewVoteBody;
-
-                // await queue.add('registration-vote', {participantId, pollId, userId})
-                await addJob('registrationVote', {participantId,userId, pollId})
+                
+                await addJob('registrationVote', {participantId,userId, pollId, createdAt: new Date()})
                 
                 return reply.status(201).send({})
             },
