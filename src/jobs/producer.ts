@@ -1,6 +1,6 @@
 import Queue from 'bee-queue';
 import { JobPayloads, JobTypes, QueueType } from './workers';
-import { jobCreatedDuration, jobCreatedWitSuccess } from './observability/producer-metrics';
+import { jobCreatedDuration, jobCreatedWitSuccess, jobCreatedWithFailures } from './observability/producer-metrics';
 
 const queue = new Queue<QueueType>('challenge-sre-glob-queue', {
   redis: process.env.DATABASE_REDIS_URL,
@@ -13,7 +13,7 @@ export const addJob = async <T extends JobTypes>(type: T, payload: JobPayloads[T
     await queue.createJob({ type, payload }).save();
     jobCreatedWitSuccess.inc({ queue: 'challenge-sre-glob-queue', job_type: type })
   }catch{
-    jobCreatedWitSuccess.inc({ queue: 'challenge-sre-glob-queue', job_type: type })
+    jobCreatedWithFailures.inc({ queue: 'challenge-sre-glob-queue', job_type: type })
   }finally{
     end()
   }
