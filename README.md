@@ -219,4 +219,3 @@ Ao executar comandos como `npm run db:generate` ou `npm run db:migrate` você po
    ## Arquitetura atual da solução
 
    ![Texto alternativo](./reports/Arquitetura-atual-desenvolvimento-2025-03-20-1021.png)
-
